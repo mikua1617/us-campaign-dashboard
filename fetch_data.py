@@ -89,6 +89,7 @@ def get_lifetime_overview(campaign_id):
     elif isinstance(overview, dict):
         row = overview
     return {
+        "sent_lifetime": row.get("emails_sent_count", 0),
         "bounced_lifetime": row.get("bounced_count", 0),
         "opens_lifetime": row.get("open_count", 0),
         "clicks_lifetime": row.get("link_click_count", 0),

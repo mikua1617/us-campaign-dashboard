@@ -10,12 +10,13 @@
 3. Don't initialize with a README (we already have one).
 
 ## 2. Upload the files
-Upload these four files/folders, keeping the exact folder structure:
+Upload these files/folders, keeping the exact folder structure:
 ```
 .github/workflows/daily-update.yml
 docs/index.html
 docs/data.json
 fetch_data.py
+email_report.py
 README.md
 ```
 Easiest way: on the repo's main page, click "Add file" → "Upload files",
@@ -29,6 +30,29 @@ drag in everything (GitHub preserves folder paths when you drag a folder).
    Generate a new one here if you don't have a v2 key yet — v1 keys won't work.
 5. Save. This value is encrypted and never visible again, even to you — that's
    expected.
+
+## 3b. Add Gmail credentials for the daily email report
+The daily report is sent via Gmail SMTP from your own ituring.ai address.
+
+1. Turn on 2-Step Verification on that Google account, if it isn't already
+   (Google Account → Security → 2-Step Verification). App passwords only
+   exist once this is on.
+2. Go to Google Account → Security → App passwords (search "app passwords"
+   in your account settings if you don't see it directly — it's sometimes
+   nested under 2-Step Verification).
+3. Create a new app password, name it something like "US dashboard report".
+   Google gives you a 16-character code — copy it, you won't see it again.
+4. Back in the repo: Settings → Secrets and variables → Actions → New
+   repository secret.
+   - Name: `GMAIL_ADDRESS` — Value: your ituring.ai email address
+   - Name: `GMAIL_APP_PASSWORD` — Value: the 16-character code from step 3
+5. If your ituring.ai account is on Google Workspace and app passwords aren't
+   showing up as an option at all, your workspace admin may have disabled
+   them — you'd need to ask them to enable it, or use a different sending
+   method (e.g. a transactional email API) instead.
+6. Recipients are set directly in `email_report.py` (the `RECIPIENTS` list
+   near the top) — not a secret, just edit that file and commit to change
+   who's on the list.
 
 ## 4. Enable GitHub Pages
 1. Repo → Settings → Pages.
