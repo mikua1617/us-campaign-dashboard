@@ -48,6 +48,7 @@
   </div>
 </div>
 
+<div style="overflow-x: auto;">
 <table>
   <thead>
     <tr>
@@ -55,13 +56,18 @@
       <th>Sent 24h</th>
       <th>Opens today</th>
       <th>Clicks today</th>
+      <th>Replies today</th>
       <th>Click %</th>
       <th>Reply %</th>
+      <th>Total opens</th>
+      <th>Total clicks</th>
+      <th>Total replies</th>
       <th>Bounces (lifetime)</th>
     </tr>
   </thead>
   <tbody id="campaignRows"></tbody>
 </table>
+</div>
 
 <script>
 function pct(n, d) { return d > 0 ? Math.round((n / d) * 1000) / 10 : 0; }
@@ -171,8 +177,12 @@ async function load() {
         <td>${cur.sent_24h || 0}</td>
         <td>${last.opened || 0}</td>
         <td>${last.clicks || 0}</td>
+        <td>${last.replies || 0}</td>
         <td>${clickPct}%</td>
         <td>${replyPct}%</td>
+        <td>${cur.opens_lifetime || 0}</td>
+        <td>${cur.clicks_lifetime || 0}</td>
+        <td>${cur.replies_lifetime || 0}</td>
         <td class="${bounceHigh ? 'danger' : ''}">${cur.bounced_lifetime || 0}</td>
       </tr>
     `;
