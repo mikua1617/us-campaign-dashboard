@@ -57,8 +57,9 @@
       <th>Opens today</th>
       <th>Clicks today</th>
       <th>Replies today</th>
+      <th>Open %</th>
       <th>Click %</th>
-      <th>Reply %</th>
+      <th>Total sent</th>
       <th>Total opens</th>
       <th>Total clicks</th>
       <th>Total replies</th>
@@ -168,8 +169,8 @@ async function load() {
     const c = campaigns[n];
     const last = dates.length ? (c.days[dates[dates.length - 1]] || {}) : {};
     const cur = c.current || {};
-    const clickPct = pct(last.clicks || 0, last.opened || 0);
-    const replyPct = pct(cur.replies_24h || 0, cur.sent_24h || 0);
+    const clickPct = pct(cur.clicks_lifetime || 0, cur.sent_lifetime || 0);
+    const openPct = pct(cur.opens_lifetime || 0, cur.sent_lifetime || 0);
     const bounceHigh = (cur.bounced_lifetime || 0) > 5;
     return `
       <tr>
@@ -178,8 +179,9 @@ async function load() {
         <td>${last.opened || 0}</td>
         <td>${last.clicks || 0}</td>
         <td>${last.replies || 0}</td>
+        <td>${openPct}%</td>
         <td>${clickPct}%</td>
-        <td>${replyPct}%</td>
+        <td>${cur.sent_lifetime || 0}</td>
         <td>${cur.opens_lifetime || 0}</td>
         <td>${cur.clicks_lifetime || 0}</td>
         <td>${cur.replies_lifetime || 0}</td>
