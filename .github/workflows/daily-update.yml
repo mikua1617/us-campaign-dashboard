@@ -36,3 +36,9 @@ jobs:
           git add docs/data.json
           git diff --staged --quiet || git commit -m "Daily data update: $(date -u +%Y-%m-%d)"
           git push
+
+      - name: Send daily report email
+        env:
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python email_report.py
