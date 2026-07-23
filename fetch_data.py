@@ -71,10 +71,21 @@ def get_daily_analytics(campaign_id, start_date, end_date):
 
 
 def get_lifetime_bounce_count(campaign_id):
-    """One call, no date range = lifetime totals. We only need bounced_count."""
-    overview = api_get("/campaigns/analytics/overview", {"id": campaign_id})
+    """
+    Lifetime bounce total. NOTE: omitting start_date/end_date does NOT mean
+    'all time' on this endpoint -- it appears to default to today only. We
+    force a wide explicit range instead (campaign launch dates are all in
+    2026, so 2020-01-01 comfortably covers everything).
+    """
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    overview = api_get(
+        "/campaigns/analytics/overview",
+        {"id": campaign_id, "start_date": "2020-01-01", "end_date": today},
+    )
     if isinstance(overview, list) and overview:
         return overview[0].get("bounced_count", 0)
+    if isinstance(overview, dict):
+        return overview.get("bounced_count", 0)
     return 0
 
 
