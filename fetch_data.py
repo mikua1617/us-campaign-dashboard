@@ -70,23 +70,30 @@ def get_daily_analytics(campaign_id, start_date, end_date):
     )
 
 
-def get_lifetime_bounce_count(campaign_id):
+def get_lifetime_overview(campaign_id):
     """
-    Lifetime bounce total. NOTE: omitting start_date/end_date does NOT mean
-    'all time' on this endpoint -- it appears to default to today only. We
-    force a wide explicit range instead (campaign launch dates are all in
-    2026, so 2020-01-01 comfortably covers everything).
+    Lifetime totals: bounces, opens, clicks, replies -- all from one call.
+    NOTE: omitting start_date/end_date does NOT mean 'all time' on this
+    endpoint -- it appears to default to today only. We force a wide explicit
+    range instead (campaign launch dates are all in 2026, so 2020-01-01
+    comfortably covers everything).
     """
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     overview = api_get(
         "/campaigns/analytics/overview",
         {"id": campaign_id, "start_date": "2020-01-01", "end_date": today},
     )
+    row = {}
     if isinstance(overview, list) and overview:
-        return overview[0].get("bounced_count", 0)
-    if isinstance(overview, dict):
-        return overview.get("bounced_count", 0)
-    return 0
+        row = overview[0]
+    elif isinstance(overview, dict):
+        row = overview
+    return {
+        "bounced_lifetime": row.get("bounced_count", 0),
+        "opens_lifetime": row.get("open_count", 0),
+        "clicks_lifetime": row.get("link_click_count", 0),
+        "replies_lifetime": row.get("reply_count", 0),
+    }
 
 
 def count_recent_emails(campaign_id, email_type, since_dt):
@@ -170,13 +177,13 @@ def main():
         sent_24h = count_recent_emails(cid, "sent", cutoff_24h)
         replies_24h = count_recent_emails(cid, "received", cutoff_24h)
 
-        # 3. Lifetime bounce count (1 call, no date range)
-        bounced_lifetime = get_lifetime_bounce_count(cid)
+        # 3. Lifetime totals (1 call): bounces, opens, clicks, replies
+        lifetime = get_lifetime_overview(cid)
 
         bucket["current"] = {
             "sent_24h": sent_24h,
             "replies_24h": replies_24h,
-            "bounced_lifetime": bounced_lifetime,
+            **lifetime,
             "as_of": now.isoformat(),
         }
 
