@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>US campaign dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; background: #fafaf9; color: #1a1a19; margin: 0; padding: 24px; }
+  h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
+  .updated { font-size: 12px; color: #767671; margin-bottom: 20px; }
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .kpi-card { background: #fff; border-radius: 10px; padding: 14px 16px; border: 1px solid #e6e5e0; }
+  .kpi-label { font-size: 12px; color: #767671; margin: 0 0 4px; }
+  .kpi-value { font-size: 22px; font-weight: 600; margin: 0; }
+  .kpi-delta { font-size: 11px; margin: 4px 0 0; display: flex; align-items: center; gap: 3px; }
+  .up { color: #0c7a3d; }
+  .down { color: #b23b3b; }
+  .flat { color: #767671; }
+  .chart-wrap { background: #fff; border-radius: 10px; padding: 16px; border: 1px solid #e6e5e0; margin-bottom: 24px; }
+  .legend { display: flex; gap: 16px; font-size: 12px; color: #767671; margin-bottom: 8px; }
+  .legend span { display: flex; align-items: center; gap: 4px; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #e6e5e0; }
+  th, td { padding: 8px 10px; text-align: right; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: #767671; font-weight: 500; border-bottom: 1px solid #e6e5e0; }
+  tr:not(:last-child) td { border-bottom: 1px solid #f0efeb; }
+  .danger { color: #b23b3b; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>US campaign dashboard</h1>
+<p class="updated" id="updatedAt">Loading...</p>
+
+<div class="kpi-row" id="kpiRow"></div>
+
+<div class="chart-wrap">
+  <div class="legend">
+    <span><span class="swatch" style="background:#2a78d6"></span>Sent</span>
+    <span><span class="swatch" style="background:#1baf7a"></span>Opened</span>
+    <span><span class="swatch" style="background:#eda100"></span>Clicked</span>
+    <span><span class="swatch" style="background:#eb6834"></span>Replied</span>
+  </div>
+  <div style="position: relative; height: 280px;">
+    <canvas id="trendChart" role="img" aria-label="14-day trend of sent, opened, clicked, and replied counts across US campaigns"></canvas>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Campaign</th>
+      <th>Sent 24h</th>
+      <th>Opens today</th>
+      <th>Clicks today</th>
+      <th>Click %</th>
+      <th>Reply %</th>
+      <th>Bounces (lifetime)</th>
+    </tr>
+  </thead>
+  <tbody id="campaignRows"></tbody>
+</table>
+
+<script>
+function pct(n, d) { return d > 0 ? Math.round((n / d) * 1000) / 10 : 0; }
+
+function deltaHtml(today, yesterday) {
+  if (yesterday === undefined || yesterday === null) return '';
+  if (today === yesterday) return '<span class="kpi-delta flat">flat vs yesterday</span>';
+  const diff = today - yesterday;
+  const cls = diff > 0 ? 'up' : 'down';
+  const arrow = diff > 0 ? '&#8593;' : '&#8595;';
+  const pctChange = yesterday > 0 ? Math.abs(Math.round((diff / yesterday) * 100)) + '%' : 'new';
+  return `<span class="kpi-delta ${cls}">${arrow} ${pctChange} vs yesterday</span>`;
+}
+
+async function load() {
+  const res = await fetch('data.json?_=' + Date.now());
+  const data = await res.json();
+  const campaigns = data.campaigns || {};
+  const names = Object.keys(campaigns);
+
+  document.getElementById('updatedAt').textContent = data.generated_at
+    ? 'Last updated ' + new Date(data.generated_at).toLocaleString()
+    : 'No data yet — first run pending';
+
+  // Build sorted list of the last 14 dates across all campaigns
+  const allDates = new Set();
+  names.forEach(n => Object.keys(campaigns[n].days || {}).forEach(d => allDates.add(d)));
+  const dates = Array.from(allDates).sort();
+
+  // Aggregate totals per date across all US campaigns
+  const totals = dates.map(date => {
+    let sent = 0, opened = 0, clicks = 0, replies = 0;
+    names.forEach(n => {
+      const row = campaigns[n].days ? campaigns[n].days[date] : null;
+      if (row) { sent += row.sent; opened += row.opened; clicks += row.clicks; replies += row.replies; }
+    });
+    return { date, sent, opened, clicks, replies };
+  });
+
+  const today = totals[totals.length - 1] || {};
+  const yesterday = totals[totals.length - 2] || {};
+
+  // Rolling 24h sent/replies and lifetime bounce, summed across campaigns
+  let sent24h = 0, replies24h = 0, bouncedLifetime = 0;
+  names.forEach(n => {
+    const cur = campaigns[n].current || {};
+    sent24h += cur.sent_24h || 0;
+    replies24h += cur.replies_24h || 0;
+    bouncedLifetime += cur.bounced_lifetime || 0;
+  });
+
+  const clickRate = pct(today.clicks || 0, today.opened || 0);
+  const yClickRate = pct(yesterday.clicks || 0, yesterday.opened || 0);
+
+  const kpis = [
+    { label: 'Active campaigns', value: names.length },
+    { label: 'Sent', sub: 'rolling 24h', value: sent24h },
+    { label: 'Replies', sub: 'rolling 24h', value: replies24h },
+    { label: 'Opens', sub: 'today', value: today.opened || 0, delta: deltaHtml(today.opened, yesterday.opened) },
+    { label: 'Clicks', sub: 'today', value: today.clicks || 0, delta: deltaHtml(today.clicks, yesterday.clicks) },
+    { label: 'Click rate', sub: 'of opens, today', value: clickRate + '%', delta: deltaHtml(clickRate, yClickRate) },
+    { label: 'Bounce rate', sub: 'lifetime', value: bouncedLifetime },
+  ];
+
+  document.getElementById('kpiRow').innerHTML = kpis.map(k => `
+    <div class="kpi-card">
+      <p class="kpi-label">${k.label}</p>
+      <p class="kpi-value">${k.value}</p>
+      ${k.sub ? `<p class="kpi-delta flat">${k.sub}</p>` : ''}
+      ${k.delta || ''}
+    </div>
+  `).join('');
+
+  // Chart
+  new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels: dates.map(d => d.slice(5)),
+      datasets: [
+        { label: 'Sent', data: totals.map(t => t.sent), borderColor: '#2a78d6', backgroundColor: '#2a78d61a', fill: true, tension: 0.3, pointRadius: 2 },
+        { label: 'Opened', data: totals.map(t => t.opened), borderColor: '#1baf7a', backgroundColor: 'transparent', tension: 0.3, pointRadius: 2, borderDash: [4, 3] },
+        { label: 'Clicked', data: totals.map(t => t.clicks), borderColor: '#eda100', backgroundColor: 'transparent', tension: 0.3, pointRadius: 2, borderDash: [2, 2] },
+        { label: 'Replied', data: totals.map(t => t.replies), borderColor: '#eb6834', backgroundColor: 'transparent', tension: 0.3, pointRadius: 2, borderDash: [6, 2, 1, 2] },
+      ],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#e6e5e0' }, beginAtZero: true },
+      },
+    },
+  });
+
+  // Table
+  document.getElementById('campaignRows').innerHTML = names.map(n => {
+    const c = campaigns[n];
+    const last = dates.length ? (c.days[dates[dates.length - 1]] || {}) : {};
+    const cur = c.current || {};
+    const clickPct = pct(last.clicks || 0, last.opened || 0);
+    const replyPct = pct(cur.replies_24h || 0, cur.sent_24h || 0);
+    const bounceHigh = (cur.bounced_lifetime || 0) > 5;
+    return `
+      <tr>
+        <td>${n}</td>
+        <td>${cur.sent_24h || 0}</td>
+        <td>${last.opened || 0}</td>
+        <td>${last.clicks || 0}</td>
+        <td>${clickPct}%</td>
+        <td>${replyPct}%</td>
+        <td class="${bounceHigh ? 'danger' : ''}">${cur.bounced_lifetime || 0}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+load().catch(err => {
+  document.getElementById('updatedAt').textContent = 'Could not load data.json — has the first Action run completed?';
+  console.error(err);
+});
+</script>
+</body>
+</html>
