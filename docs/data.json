@@ -2,7 +2,7 @@
   "campaigns": {
     "US_CEDP 2_30/06/26": {
       "current": {
-        "as_of": "2026-07-24T05:34:55.052521+00:00",
+        "as_of": "2026-07-25T05:30:27.009506+00:00",
         "bounced_lifetime": 3,
         "clicks_lifetime": 0,
         "opens_lifetime": 145,
@@ -12,14 +12,6 @@
         "sent_lifetime": 166
       },
       "days": {
-        "2026-07-10": {
-          "clicks": 0,
-          "opened": 17,
-          "replies": 0,
-          "sent": 32,
-          "unique_clicks": 0,
-          "unique_opened": 15
-        },
         "2026-07-11": {
           "clicks": 0,
           "opened": 2,
@@ -81,14 +73,14 @@
     },
     "US_CU Ray_16/07/26": {
       "current": {
-        "as_of": "2026-07-24T05:34:55.052521+00:00",
+        "as_of": "2026-07-25T05:30:27.009506+00:00",
         "bounced_lifetime": 60,
         "clicks_lifetime": 0,
-        "opens_lifetime": 9,
+        "opens_lifetime": 10,
         "replies_24h": 0,
         "replies_lifetime": 0,
-        "sent_24h": 17,
-        "sent_lifetime": 115
+        "sent_24h": 11,
+        "sent_lifetime": 126
       },
       "days": {
         "2026-07-16": {
@@ -138,20 +130,28 @@
           "sent": 17,
           "unique_clicks": 0,
           "unique_opened": 1
+        },
+        "2026-07-24": {
+          "clicks": 0,
+          "opened": 1,
+          "replies": 0,
+          "sent": 11,
+          "unique_clicks": 0,
+          "unique_opened": 1
         }
       },
       "id": "b2efc65a-6224-4e21-9842-9b1a56f1ade7"
     },
     "US_Collections Top 50_21/07/26": {
       "current": {
-        "as_of": "2026-07-24T05:34:55.052521+00:00",
+        "as_of": "2026-07-25T05:30:27.009506+00:00",
         "bounced_lifetime": 10,
         "clicks_lifetime": 0,
-        "opens_lifetime": 34,
+        "opens_lifetime": 56,
         "replies_24h": 0,
         "replies_lifetime": 0,
-        "sent_24h": 0,
-        "sent_lifetime": 69
+        "sent_24h": 58,
+        "sent_lifetime": 127
       },
       "days": {
         "2026-07-21": {
@@ -169,20 +169,36 @@
           "sent": 0,
           "unique_clicks": 0,
           "unique_opened": 2
+        },
+        "2026-07-24": {
+          "clicks": 0,
+          "opened": 21,
+          "replies": 0,
+          "sent": 58,
+          "unique_clicks": 0,
+          "unique_opened": 18
+        },
+        "2026-07-25": {
+          "clicks": 0,
+          "opened": 1,
+          "replies": 0,
+          "sent": 0,
+          "unique_clicks": 0,
+          "unique_opened": 1
         }
       },
       "id": "a3c94c6d-b995-4805-b4a8-0e9a2ffe901f"
     },
     "US_Post Event Followup GLCCA_15/07/26": {
       "current": {
-        "as_of": "2026-07-24T05:34:55.052521+00:00",
+        "as_of": "2026-07-25T05:30:27.009506+00:00",
         "bounced_lifetime": 1,
-        "clicks_lifetime": 74,
-        "opens_lifetime": 70,
+        "clicks_lifetime": 94,
+        "opens_lifetime": 81,
         "replies_24h": 0,
         "replies_lifetime": 3,
-        "sent_24h": 0,
-        "sent_lifetime": 119
+        "sent_24h": 29,
+        "sent_lifetime": 148
       },
       "days": {
         "2026-07-16": {
@@ -242,26 +258,26 @@
           "unique_opened": 0
         },
         "2026-07-24": {
-          "clicks": 0,
-          "opened": 1,
+          "clicks": 20,
+          "opened": 12,
           "replies": 0,
-          "sent": 0,
-          "unique_clicks": 0,
-          "unique_opened": 1
+          "sent": 29,
+          "unique_clicks": 20,
+          "unique_opened": 12
         }
       },
       "id": "c519d43e-3622-43a5-a942-5b5aa226a35a"
     },
     "US_Post Event Followup Monticello Symposium_15/07/26": {
       "current": {
-        "as_of": "2026-07-24T05:34:55.052521+00:00",
-        "bounced_lifetime": 6,
-        "clicks_lifetime": 6,
-        "opens_lifetime": 60,
+        "as_of": "2026-07-25T05:30:27.009506+00:00",
+        "bounced_lifetime": 10,
+        "clicks_lifetime": 14,
+        "opens_lifetime": 66,
         "replies_24h": 0,
         "replies_lifetime": 1,
-        "sent_24h": 30,
-        "sent_lifetime": 136
+        "sent_24h": 25,
+        "sent_lifetime": 161
       },
       "days": {
         "2026-07-16": {
@@ -311,20 +327,28 @@
           "sent": 30,
           "unique_clicks": 0,
           "unique_opened": 12
+        },
+        "2026-07-24": {
+          "clicks": 8,
+          "opened": 6,
+          "replies": 0,
+          "sent": 25,
+          "unique_clicks": 7,
+          "unique_opened": 4
         }
       },
       "id": "1b27009b-e950-42ac-a791-694a3a491ca9"
     },
     "US_Valsan Newsletter subscribers_15/07/26": {
       "current": {
-        "as_of": "2026-07-24T05:34:55.052521+00:00",
+        "as_of": "2026-07-25T05:30:27.009506+00:00",
         "bounced_lifetime": 6,
         "clicks_lifetime": 0,
-        "opens_lifetime": 36,
+        "opens_lifetime": 43,
         "replies_24h": 0,
         "replies_lifetime": 0,
-        "sent_24h": 18,
-        "sent_lifetime": 108
+        "sent_24h": 28,
+        "sent_lifetime": 136
       },
       "days": {
         "2026-07-17": {
@@ -369,15 +393,15 @@
         },
         "2026-07-24": {
           "clicks": 0,
-          "opened": 1,
+          "opened": 8,
           "replies": 0,
-          "sent": 0,
+          "sent": 28,
           "unique_clicks": 0,
-          "unique_opened": 1
+          "unique_opened": 7
         }
       },
       "id": "7998cfd2-d8de-491b-8340-fe5b8ebfee02"
     }
   },
-  "generated_at": "2026-07-24T05:34:55.052521+00:00"
+  "generated_at": "2026-07-25T05:30:27.009506+00:00"
 }
