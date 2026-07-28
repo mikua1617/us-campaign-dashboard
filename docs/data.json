@@ -2,9 +2,10 @@
   "campaigns": {
     "US_CEDP 2_30/06/26": {
       "current": {
-        "as_of": "2026-07-28T05:32:52.877847+00:00",
+        "as_of": "2026-07-28T11:52:25.502801+00:00",
         "bounced_lifetime": 3,
         "clicks_lifetime": 0,
+        "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1MaB1nGmVD20wuKTPK0Q6Mhu7rAhAHGN08dEwUKjFAdw/edit",
         "opens_lifetime": 145,
         "replies_24h": 0,
         "replies_lifetime": 0,
@@ -49,9 +50,10 @@
     },
     "US_CU Ray_16/07/26": {
       "current": {
-        "as_of": "2026-07-28T05:32:52.877847+00:00",
+        "as_of": "2026-07-28T11:52:25.502801+00:00",
         "bounced_lifetime": 60,
         "clicks_lifetime": 0,
+        "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1C3Di0BV0AWxfdIvDI1WNzN1QNcHBksFqARhFgNx2AeE/edit",
         "opens_lifetime": 10,
         "replies_24h": 0,
         "replies_lifetime": 0,
@@ -120,9 +122,10 @@
     },
     "US_Collections Top 50_21/07/26": {
       "current": {
-        "as_of": "2026-07-28T05:32:52.877847+00:00",
+        "as_of": "2026-07-28T11:52:25.502801+00:00",
         "bounced_lifetime": 10,
         "clicks_lifetime": 0,
+        "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1kMIvt-DUieluQipFKwUvVAEcG-9DFjfd4RWBG5cxopg/edit",
         "opens_lifetime": 56,
         "replies_24h": 0,
         "replies_lifetime": 0,
@@ -167,9 +170,10 @@
     },
     "US_Post Event Followup GLCCA_15/07/26": {
       "current": {
-        "as_of": "2026-07-28T05:32:52.877847+00:00",
+        "as_of": "2026-07-28T11:52:25.502801+00:00",
         "bounced_lifetime": 1,
         "clicks_lifetime": 96,
+        "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1KphP2rhZSUZl-rXFBvberiUfv4oJR8dQPCMlbQkSJMw/edit",
         "opens_lifetime": 83,
         "replies_24h": 0,
         "replies_lifetime": 3,
@@ -270,9 +274,10 @@
     },
     "US_Post Event Followup Monticello Symposium_15/07/26": {
       "current": {
-        "as_of": "2026-07-28T05:32:52.877847+00:00",
+        "as_of": "2026-07-28T11:52:25.502801+00:00",
         "bounced_lifetime": 10,
         "clicks_lifetime": 16,
+        "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1kcvbCpaUBO4DvXprCEdArjNXR0rJxQazC6R1a7FzVgE/edit",
         "opens_lifetime": 66,
         "replies_24h": 0,
         "replies_lifetime": 1,
@@ -349,9 +354,10 @@
     },
     "US_Valsan Newsletter subscribers_15/07/26": {
       "current": {
-        "as_of": "2026-07-28T05:32:52.877847+00:00",
+        "as_of": "2026-07-28T11:52:25.502801+00:00",
         "bounced_lifetime": 6,
         "clicks_lifetime": 0,
+        "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1oERECsNWBFYujNaKcXtLXepVc-YWcmytdE6TX3OvkWY/edit",
         "opens_lifetime": 45,
         "replies_24h": 0,
         "replies_lifetime": 0,
@@ -427,5 +433,6 @@
       "id": "7998cfd2-d8de-491b-8340-fe5b8ebfee02"
     }
   },
-  "generated_at": "2026-07-28T05:32:52.877847+00:00"
+  "generated_at": "2026-07-28T11:52:25.502801+00:00",
+  "master_pivot_url": "https://docs.google.com/spreadsheets/d/1LWrBgz4--rR1gO66bfX-ZMHFdgcWccpJ4d-MY_O_Zcg/edit"
 }
