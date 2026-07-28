@@ -78,7 +78,25 @@ listing every lead with their open/click/reply counts. Setup is one-time.
    It creates each campaign's sheet itself on first run and shares viewing
    access with the recipient list automatically (same list as the email
    report, set in `leads_sheet_sync.py`'s `SHARE_WITH`).
-8. Recipients get view-only access by default. They can still sort/filter
+8. **Important — service accounts have zero personal Drive storage and
+   can't own files directly** (this is a permanent Google platform rule,
+   not something any admin setting can change). Because of this, you also
+   need a Shared Drive for the sheets to actually live in:
+   - Go to drive.google.com → "Shared drives" → "+ New" → name it anything
+     (e.g. "US Campaign Dashboard")
+   - Open it, add the service account's email (the `client_email` field
+     inside the JSON key you downloaded, looks like
+     `dashboard-sheets-writer@your-project.iam.gserviceaccount.com`) as a
+     member with **Content Manager** access
+   - Copy the Shared Drive's folder ID from its URL
+     (`drive.google.com/drive/folders/THIS_PART`)
+   - Paste that ID into `leads_sheet_sync.py`'s `SHARED_DRIVE_FOLDER_ID`
+     constant near the top of the file, replacing the existing value
+   - If "Shared drives" doesn't appear in your Drive sidebar at all, your
+     Workspace plan doesn't support them — you'd need a plan upgrade or a
+     different approach (OAuth domain-wide delegation impersonating a real
+     user instead of a service account).
+9. Recipients get view-only access by default. They can still sort/filter
    the data on their end without affecting the shared source, using
    Google Sheets' "Data → Filter views → Create new filter view" — that's
    personal and doesn't touch what everyone else sees. If you'd rather give

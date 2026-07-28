@@ -48,6 +48,12 @@ drive_svc = build("drive", "v3", credentials=CREDS)
 
 # Same recipient list as email_report.py -- kept in sync manually, both are
 # small enough that a single shared constant would be overkill for now.
+# Files must live in this Shared Drive, not owned directly by the service
+# account -- see create_sheet_for_campaign() for why. This is the Shared
+# Drive named "US Campaign Dashboard", with the service account added as a
+# Content Manager member.
+SHARED_DRIVE_FOLDER_ID = "0AHbv-XKfGFpmUk9PVA"
+
 SHARE_WITH = [
     "ray.millman@ituring.ai",
     "girdhar.s@ituring.ai",
@@ -115,15 +121,29 @@ def save_sheet_links(links):
 
 
 def create_sheet_for_campaign(campaign_name):
-    spreadsheet = sheets_svc.spreadsheets().create(
-        body={"properties": {"title": f"Leads — {campaign_name}"}}
+    """
+    IMPORTANT: service accounts have a permanent 0 GB personal Drive quota
+    and cannot own files directly -- Google's own docs confirm this. Files
+    must be created inside a Shared Drive instead, which has its own pooled
+    storage. Hence: create via the DRIVE API (not Sheets API's own create
+    endpoint) with the shared drive as parent, and supportsAllDrives=True on
+    every Drive API call that touches this file (create AND sharing).
+    """
+    file_metadata = {
+        "name": f"Leads — {campaign_name}",
+        "mimeType": "application/vnd.google-apps.spreadsheet",
+        "parents": [SHARED_DRIVE_FOLDER_ID],
+    }
+    created = drive_svc.files().create(
+        body=file_metadata, fields="id", supportsAllDrives=True
     ).execute()
-    sheet_id = spreadsheet["spreadsheetId"]
+    sheet_id = created["id"]
     for email in SHARE_WITH:
         drive_svc.permissions().create(
             fileId=sheet_id,
             body={"type": "user", "role": "reader", "emailAddress": email},
             sendNotificationEmail=False,
+            supportsAllDrives=True,
         ).execute()
     return sheet_id
 
