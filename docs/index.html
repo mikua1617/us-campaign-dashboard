@@ -33,6 +33,7 @@
 
 <h1>US campaign dashboard</h1>
 <p class="updated" id="updatedAt">Loading...</p>
+<p id="masterPivotLink" style="font-size: 13px; margin: -12px 0 20px;"></p>
 
 <div class="kpi-row" id="kpiRow"></div>
 
@@ -64,6 +65,7 @@
       <th>Total clicks</th>
       <th>Total replies</th>
       <th>Bounces (lifetime)</th>
+      <th>Leads sheet</th>
     </tr>
   </thead>
   <tbody id="campaignRows"></tbody>
@@ -92,6 +94,10 @@ async function load() {
   document.getElementById('updatedAt').textContent = data.generated_at
     ? 'Last updated ' + new Date(data.generated_at).toLocaleString()
     : 'No data yet — first run pending';
+
+  document.getElementById('masterPivotLink').innerHTML = data.master_pivot_url
+    ? `<a href="${data.master_pivot_url}" target="_blank" rel="noopener">Master engagement pivot (all campaigns, ranked) ↗</a>`
+    : '';
 
   // Build sorted list of the last 14 dates across all campaigns
   const allDates = new Set();
@@ -186,6 +192,7 @@ async function load() {
         <td>${cur.clicks_lifetime || 0}</td>
         <td>${cur.replies_lifetime || 0}</td>
         <td class="${bounceHigh ? 'danger' : ''}">${cur.bounced_lifetime || 0}</td>
+        <td>${cur.leads_sheet_url ? `<a href="${cur.leads_sheet_url}" target="_blank" rel="noopener">Open ↗</a>` : '—'}</td>
       </tr>
     `;
   }).join('');
