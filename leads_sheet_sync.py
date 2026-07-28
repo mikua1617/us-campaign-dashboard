@@ -73,6 +73,12 @@ def api_get(path, params=None):
     return resp.json()
 
 
+def api_post(path, body=None):
+    resp = requests.post(f"{BASE_URL}{path}", headers=HEADERS, json=body or {}, timeout=30)
+    resp.raise_for_status()
+    return resp.json()
+
+
 def get_active_us_campaigns():
     campaigns = []
     starting_after = None
@@ -92,16 +98,25 @@ def get_active_us_campaigns():
 
 
 def get_all_leads(campaign_id):
+    """
+    NOTE: unlike /campaigns and /campaigns/analytics/daily (which are GET
+    with query params), leads listing is a POST endpoint with a JSON body --
+    Instantly's own docs explain this is a deliberate deviation because the
+    filter options are too complex for a query string. Confirmed via
+    developer.instantly.ai/api-reference/lead/list-leads.
+    """
     leads = []
     starting_after = None
     while True:
-        params = {"campaign": campaign_id, "limit": 100}
+        body = {"campaign": campaign_id, "limit": 100}
         if starting_after:
-            params["starting_after"] = starting_after
-        page = api_get("/leads", params)
+            body["starting_after"] = starting_after
+        page = api_post("/leads/list", body)
         items = page.get("items", [])
         leads.extend(items)
-        starting_after = page.get("next_starting_after")
+        # Defensive: handle either a top-level cursor or one nested under
+        # "pagination", since this wasn't 100% confirmed from docs alone.
+        starting_after = page.get("next_starting_after") or (page.get("pagination") or {}).get("next_starting_after")
         if not starting_after or not items:
             break
     return leads
