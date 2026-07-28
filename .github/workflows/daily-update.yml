@@ -2,9 +2,9 @@ name: Daily Instantly dashboard update
 
 on:
   schedule:
-    # 02:30 UTC = 08:00 IST, every day
-    - cron: '37 2 * * *'
-  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab
+    # 02:30 UTC = 08:00 IST, Monday through Friday only (day-of-week: 1-5)
+    - cron: '30 2 * * 1-5'
+  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab, any day
 
 permissions:
   contents: write   # needed so the workflow can commit data.json back
@@ -22,18 +22,24 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests google-auth google-api-python-client
 
       - name: Run fetch script
         env:
           INSTANTLY_API_KEY: ${{ secrets.INSTANTLY_API_KEY }}
         run: python fetch_data.py
 
+      - name: Sync per-campaign leads sheets
+        env:
+          INSTANTLY_API_KEY: ${{ secrets.INSTANTLY_API_KEY }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: python leads_sheet_sync.py
+
       - name: Commit updated data
         run: |
           git config user.name "dashboard-bot"
           git config user.email "actions@github.com"
-          git add docs/data.json
+          git add docs/data.json docs/sheet_links.json
           git diff --staged --quiet || git commit -m "Daily data update: $(date -u +%Y-%m-%d)"
           git push
 
