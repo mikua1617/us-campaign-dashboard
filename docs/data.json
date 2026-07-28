@@ -2,7 +2,7 @@
   "campaigns": {
     "US_CEDP 2_30/06/26": {
       "current": {
-        "as_of": "2026-07-27T06:05:42.823322+00:00",
+        "as_of": "2026-07-28T05:32:52.877847+00:00",
         "bounced_lifetime": 3,
         "clicks_lifetime": 0,
         "opens_lifetime": 145,
@@ -12,14 +12,6 @@
         "sent_lifetime": 166
       },
       "days": {
-        "2026-07-13": {
-          "clicks": 0,
-          "opened": 3,
-          "replies": 0,
-          "sent": 0,
-          "unique_clicks": 0,
-          "unique_opened": 2
-        },
         "2026-07-14": {
           "clicks": 0,
           "opened": 21,
@@ -57,7 +49,7 @@
     },
     "US_CU Ray_16/07/26": {
       "current": {
-        "as_of": "2026-07-27T06:05:42.823322+00:00",
+        "as_of": "2026-07-28T05:32:52.877847+00:00",
         "bounced_lifetime": 60,
         "clicks_lifetime": 0,
         "opens_lifetime": 10,
@@ -128,7 +120,7 @@
     },
     "US_Collections Top 50_21/07/26": {
       "current": {
-        "as_of": "2026-07-27T06:05:42.823322+00:00",
+        "as_of": "2026-07-28T05:32:52.877847+00:00",
         "bounced_lifetime": 10,
         "clicks_lifetime": 0,
         "opens_lifetime": 56,
@@ -175,7 +167,7 @@
     },
     "US_Post Event Followup GLCCA_15/07/26": {
       "current": {
-        "as_of": "2026-07-27T06:05:42.823322+00:00",
+        "as_of": "2026-07-28T05:32:52.877847+00:00",
         "bounced_lifetime": 1,
         "clicks_lifetime": 96,
         "opens_lifetime": 83,
@@ -278,7 +270,7 @@
     },
     "US_Post Event Followup Monticello Symposium_15/07/26": {
       "current": {
-        "as_of": "2026-07-27T06:05:42.823322+00:00",
+        "as_of": "2026-07-28T05:32:52.877847+00:00",
         "bounced_lifetime": 10,
         "clicks_lifetime": 16,
         "opens_lifetime": 66,
@@ -357,7 +349,7 @@
     },
     "US_Valsan Newsletter subscribers_15/07/26": {
       "current": {
-        "as_of": "2026-07-27T06:05:42.823322+00:00",
+        "as_of": "2026-07-28T05:32:52.877847+00:00",
         "bounced_lifetime": 6,
         "clicks_lifetime": 0,
         "opens_lifetime": 45,
@@ -435,5 +427,5 @@
       "id": "7998cfd2-d8de-491b-8340-fe5b8ebfee02"
     }
   },
-  "generated_at": "2026-07-27T06:05:42.823322+00:00"
+  "generated_at": "2026-07-28T05:32:52.877847+00:00"
 }
