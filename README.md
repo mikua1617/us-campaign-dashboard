@@ -17,6 +17,7 @@ docs/index.html
 docs/data.json
 fetch_data.py
 email_report.py
+leads_sheet_sync.py
 README.md
 ```
 Easiest way: on the repo's main page, click "Add file" → "Upload files",
@@ -53,6 +54,36 @@ The daily report is sent via Gmail SMTP from your own ituring.ai address.
 6. Recipients are set directly in `email_report.py` (the `RECIPIENTS` list
    near the top) — not a secret, just edit that file and commit to change
    who's on the list.
+
+## 3c. Add Google Sheets access for the per-campaign leads sheets
+This lets the script create and update one Google Sheet per active campaign,
+listing every lead with their open/click/reply counts. Setup is one-time.
+
+1. Go to console.cloud.google.com. Create a new project (or reuse one),
+   name doesn't matter — e.g. "ituring-dashboard".
+2. In that project, go to "APIs & Services" → "Enabled APIs" and enable
+   both **Google Sheets API** and **Google Drive API**.
+3. Go to "IAM & Admin" → "Service Accounts" → "Create service account".
+   Name it something like `dashboard-sheets-writer`. No special roles
+   needed on the "grant access" screens — skip those, click Done.
+4. Click into the new service account → "Keys" tab → "Add key" →
+   "Create new key" → JSON. This downloads a `.json` file — treat it like a
+   password, don't commit it to the repo.
+5. Open that downloaded JSON file in a text editor, select all, copy it.
+6. Repo → Settings → Secrets and variables → Actions → New repository
+   secret.
+   - Name: `GOOGLE_SERVICE_ACCOUNT_JSON`
+   - Value: paste the entire JSON file contents as-is
+7. That's it — no need to share anything with the service account manually.
+   It creates each campaign's sheet itself on first run and shares viewing
+   access with the recipient list automatically (same list as the email
+   report, set in `leads_sheet_sync.py`'s `SHARE_WITH`).
+8. Recipients get view-only access by default. They can still sort/filter
+   the data on their end without affecting the shared source, using
+   Google Sheets' "Data → Filter views → Create new filter view" — that's
+   personal and doesn't touch what everyone else sees. If you'd rather give
+   edit access instead, change `"role": "reader"` to `"role": "writer"` in
+   `leads_sheet_sync.py`.
 
 ## 4. Enable GitHub Pages
 1. Repo → Settings → Pages.

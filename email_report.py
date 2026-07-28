@@ -67,6 +67,7 @@ def aggregate_totals(campaigns):
 def build_html(data):
     campaigns = data.get("campaigns", {})
     generated_at = data.get("generated_at")
+    master_pivot_url = data.get("master_pivot_url")
     totals = aggregate_totals(campaigns)
     today = totals[-1] if totals else {}
     yesterday = totals[-2] if len(totals) > 1 else {}
@@ -112,6 +113,8 @@ def build_html(data):
         click_pct = pct(cur.get("clicks_lifetime", 0), cur.get("sent_lifetime", 0))
         bounce_high = cur.get("bounced_lifetime", 0) > 5
         bounce_style = "color:#b23b3b; font-weight:600;" if bounce_high else ""
+        sheet_url = cur.get("leads_sheet_url")
+        sheet_link = f'<a href="{sheet_url}" style="color:#2a78d6;">Open &rarr;</a>' if sheet_url else "—"
         rows_html += f"""
         <tr>
           <td style="padding:6px 8px; border-bottom:1px solid #eee;">{name}</td>
@@ -126,6 +129,7 @@ def build_html(data):
           <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('clicks_lifetime', 0)}</td>
           <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('replies_lifetime', 0)}</td>
           <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right; {bounce_style}">{cur.get('bounced_lifetime', 0)}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:center;">{sheet_link}</td>
         </tr>"""
 
     generated_str = (
@@ -139,6 +143,7 @@ def build_html(data):
       <p style="font-size:13px; color:#767671; margin-top:0;">
         Generated {generated_str} &middot;
         <a href="{DASHBOARD_URL}" style="color:#2a78d6;">View live dashboard &rarr;</a>
+        {f' &middot; <a href="{master_pivot_url}" style="color:#2a78d6;">Master engagement pivot &rarr;</a>' if master_pivot_url else ''}
       </p>
 
       <table cellspacing="0" cellpadding="0" style="margin: 16px 0;"><tr>{kpi_html}</tr></table>
@@ -158,6 +163,7 @@ def build_html(data):
             <th style="padding:6px 8px; color:#767671; border-bottom:1px solid #ccc;">Total clicks</th>
             <th style="padding:6px 8px; color:#767671; border-bottom:1px solid #ccc;">Total replies</th>
             <th style="padding:6px 8px; color:#767671; border-bottom:1px solid #ccc;">Bounces (lifetime)</th>
+            <th style="padding:6px 8px; color:#767671; border-bottom:1px solid #ccc;">Leads sheet</th>
           </tr>
         </thead>
         <tbody>{rows_html}</tbody>
