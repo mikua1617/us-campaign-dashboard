@@ -122,15 +122,15 @@
     },
     "US_Collections Top 50_21/07/26": {
       "current": {
-        "as_of": "2026-07-28T11:52:25.502801+00:00",
-        "bounced_lifetime": 10,
+        "as_of": "2026-07-29T05:34:32.573338+00:00",
+        "bounced_lifetime": 13,
         "clicks_lifetime": 0,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1kMIvt-DUieluQipFKwUvVAEcG-9DFjfd4RWBG5cxopg/edit",
-        "opens_lifetime": 56,
+        "opens_lifetime": 78,
         "replies_24h": 0,
         "replies_lifetime": 0,
-        "sent_24h": 0,
-        "sent_lifetime": 127
+        "sent_24h": 58,
+        "sent_lifetime": 185
       },
       "days": {
         "2026-07-21": {
@@ -164,21 +164,37 @@
           "sent": 0,
           "unique_clicks": 0,
           "unique_opened": 1
+        },
+        "2026-07-28": {
+          "clicks": 0,
+          "opened": 21,
+          "replies": 0,
+          "sent": 58,
+          "unique_clicks": 0,
+          "unique_opened": 20
+        },
+        "2026-07-29": {
+          "clicks": 0,
+          "opened": 1,
+          "replies": 0,
+          "sent": 0,
+          "unique_clicks": 0,
+          "unique_opened": 1
         }
       },
       "id": "a3c94c6d-b995-4805-b4a8-0e9a2ffe901f"
     },
     "US_Post Event Followup GLCCA_15/07/26": {
       "current": {
-        "as_of": "2026-07-28T11:52:25.502801+00:00",
+        "as_of": "2026-07-29T05:34:32.573338+00:00",
         "bounced_lifetime": 1,
-        "clicks_lifetime": 96,
+        "clicks_lifetime": 113,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1KphP2rhZSUZl-rXFBvberiUfv4oJR8dQPCMlbQkSJMw/edit",
-        "opens_lifetime": 83,
+        "opens_lifetime": 95,
         "replies_24h": 0,
         "replies_lifetime": 3,
-        "sent_24h": 0,
-        "sent_lifetime": 148
+        "sent_24h": 30,
+        "sent_lifetime": 178
       },
       "days": {
         "2026-07-16": {
@@ -268,21 +284,29 @@
           "sent": 0,
           "unique_clicks": 0,
           "unique_opened": 1
+        },
+        "2026-07-28": {
+          "clicks": 17,
+          "opened": 12,
+          "replies": 0,
+          "sent": 30,
+          "unique_clicks": 11,
+          "unique_opened": 9
         }
       },
       "id": "c519d43e-3622-43a5-a942-5b5aa226a35a"
     },
     "US_Post Event Followup Monticello Symposium_15/07/26": {
       "current": {
-        "as_of": "2026-07-28T11:52:25.502801+00:00",
+        "as_of": "2026-07-29T05:34:32.573338+00:00",
         "bounced_lifetime": 10,
-        "clicks_lifetime": 16,
+        "clicks_lifetime": 34,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1kcvbCpaUBO4DvXprCEdArjNXR0rJxQazC6R1a7FzVgE/edit",
-        "opens_lifetime": 66,
+        "opens_lifetime": 75,
         "replies_24h": 0,
         "replies_lifetime": 1,
-        "sent_24h": 0,
-        "sent_lifetime": 161
+        "sent_24h": 25,
+        "sent_lifetime": 186
       },
       "days": {
         "2026-07-16": {
@@ -348,6 +372,14 @@
           "sent": 0,
           "unique_clicks": 1,
           "unique_opened": 0
+        },
+        "2026-07-28": {
+          "clicks": 18,
+          "opened": 9,
+          "replies": 0,
+          "sent": 25,
+          "unique_clicks": 17,
+          "unique_opened": 9
         }
       },
       "id": "1b27009b-e950-42ac-a791-694a3a491ca9"
@@ -433,6 +465,6 @@
       "id": "7998cfd2-d8de-491b-8340-fe5b8ebfee02"
     }
   },
-  "generated_at": "2026-07-28T11:52:25.502801+00:00",
+  "generated_at": "2026-07-29T05:34:32.573338+00:00",
   "master_pivot_url": "https://docs.google.com/spreadsheets/d/1LWrBgz4--rR1gO66bfX-ZMHFdgcWccpJ4d-MY_O_Zcg/edit"
 }
