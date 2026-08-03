@@ -122,7 +122,7 @@
     },
     "US_Collections Top 50_21/07/26": {
       "current": {
-        "as_of": "2026-08-03T05:55:17.056702+00:00",
+        "as_of": "2026-08-03T15:51:00.924071+00:00",
         "bounced_lifetime": 13,
         "clicks_lifetime": 0,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1kMIvt-DUieluQipFKwUvVAEcG-9DFjfd4RWBG5cxopg/edit",
@@ -314,11 +314,11 @@
     },
     "US_Post Event Followup Monticello Symposium_15/07/26": {
       "current": {
-        "as_of": "2026-08-03T05:55:17.056702+00:00",
+        "as_of": "2026-08-03T15:51:00.924071+00:00",
         "bounced_lifetime": 10,
         "clicks_lifetime": 40,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1kcvbCpaUBO4DvXprCEdArjNXR0rJxQazC6R1a7FzVgE/edit",
-        "opens_lifetime": 95,
+        "opens_lifetime": 96,
         "replies_24h": 0,
         "replies_lifetime": 1,
         "sent_24h": 0,
@@ -396,6 +396,14 @@
           "sent": 27,
           "unique_clicks": 1,
           "unique_opened": 8
+        },
+        "2026-08-03": {
+          "clicks": 0,
+          "opened": 1,
+          "replies": 0,
+          "sent": 0,
+          "unique_clicks": 0,
+          "unique_opened": 1
         }
       },
       "id": "1b27009b-e950-42ac-a791-694a3a491ca9"
@@ -481,6 +489,6 @@
       "id": "7998cfd2-d8de-491b-8340-fe5b8ebfee02"
     }
   },
-  "generated_at": "2026-08-03T05:55:17.056702+00:00",
+  "generated_at": "2026-08-03T15:51:00.924071+00:00",
   "master_pivot_url": "https://docs.google.com/spreadsheets/d/1LWrBgz4--rR1gO66bfX-ZMHFdgcWccpJ4d-MY_O_Zcg/edit"
 }
