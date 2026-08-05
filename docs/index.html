@@ -49,6 +49,33 @@
   </div>
 </div>
 
+<h2 style="font-size: 15px; margin: 0 0 8px;">Active campaigns</h2>
+<div style="overflow-x: auto; margin-bottom: 28px;">
+<table>
+  <thead>
+    <tr>
+      <th>Campaign</th>
+      <th>Leads</th>
+      <th>Sent 24h</th>
+      <th>Opens today</th>
+      <th>Clicks today</th>
+      <th>Replies today</th>
+      <th>Open %</th>
+      <th>Click %</th>
+      <th>Total sent</th>
+      <th>Total opens</th>
+      <th>Total clicks</th>
+      <th>Total replies</th>
+      <th>Bounces (lifetime)</th>
+      <th>Leads sheet</th>
+    </tr>
+  </thead>
+  <tbody id="activeCampaignRows"></tbody>
+</table>
+</div>
+
+<h2 style="font-size: 15px; margin: 0 0 8px;">Completed campaigns</h2>
+<p style="font-size: 12px; color: #767671; margin: -4px 0 8px;">Still tracked — opens, clicks, and replies can keep arriving for weeks after the last send.</p>
 <div style="overflow-x: auto;">
 <table>
   <thead>
@@ -69,7 +96,7 @@
       <th>Leads sheet</th>
     </tr>
   </thead>
-  <tbody id="campaignRows"></tbody>
+  <tbody id="completedCampaignRows"></tbody>
 </table>
 </div>
 
@@ -91,6 +118,11 @@ async function load() {
   const data = await res.json();
   const campaigns = data.campaigns || {};
   const names = Object.keys(campaigns);
+  // status 1 = active; anything else (completed, paused, etc.) goes in the
+  // second section. Treat a missing status (old data, pre-this-change) as
+  // active so nothing vanishes unexpectedly during the transition.
+  const activeNames = names.filter(n => (campaigns[n].current || {}).status === 1 || (campaigns[n].current || {}).status === undefined);
+  const completedNames = names.filter(n => !activeNames.includes(n));
 
   document.getElementById('updatedAt').textContent = data.generated_at
     ? 'Last updated ' + new Date(data.generated_at).toLocaleString()
@@ -131,7 +163,7 @@ async function load() {
   const yClickRate = pct(yesterday.clicks || 0, yesterday.opened || 0);
 
   const kpis = [
-    { label: 'Active campaigns', value: names.length },
+    { label: 'Active campaigns', value: activeNames.length },
     { label: 'Sent', sub: 'rolling 24h', value: sent24h },
     { label: 'Replies', sub: 'rolling 24h', value: replies24h },
     { label: 'Opens', sub: 'today', value: today.opened || 0, delta: deltaHtml(today.opened, yesterday.opened) },
@@ -171,40 +203,44 @@ async function load() {
     },
   });
 
-  // Table
-  document.getElementById('campaignRows').innerHTML = names.map(n => {
-    const c = campaigns[n];
-    const last = dates.length ? (c.days[dates[dates.length - 1]] || {}) : {};
-    const cur = c.current || {};
-    // Rates use UNIQUE opens/clicks (distinct people), not raw event counts --
-    // using raw totals here can exceed 100% since one person can open the
-    // same email multiple times.
-    // TRUE per-person rate: distinct people who opened/clicked at least
-    // once, out of total leads in the campaign -- NOT event counts divided
-    // by emails sent (which inflates with every follow-up sequence step
-    // and can produce nonsensical rates over 100%).
-    const openPct = pct(cur.unique_openers_lifetime || 0, cur.leads_count || 0);
-    const clickPct = pct(cur.unique_clickers_lifetime || 0, cur.leads_count || 0);
-    const bounceHigh = (cur.bounced_lifetime || 0) > 5;
-    return `
-      <tr>
-        <td>${n}</td>
-        <td>${cur.leads_count || 0}</td>
-        <td>${cur.sent_24h || 0}</td>
-        <td>${last.opened || 0}</td>
-        <td>${last.clicks || 0}</td>
-        <td>${last.replies || 0}</td>
-        <td>${openPct}%</td>
-        <td>${clickPct}%</td>
-        <td>${cur.sent_lifetime || 0}</td>
-        <td>${cur.opens_lifetime || 0}</td>
-        <td>${cur.clicks_lifetime || 0}</td>
-        <td>${cur.replies_lifetime || 0}</td>
-        <td class="${bounceHigh ? 'danger' : ''}">${cur.bounced_lifetime || 0}</td>
-        <td>${cur.leads_sheet_url ? `<a href="${cur.leads_sheet_url}" target="_blank" rel="noopener">Open ↗</a>` : '—'}</td>
-      </tr>
-    `;
-  }).join('');
+  // Table row builder, reused for both Active and Completed sections
+  function buildRows(nameList) {
+    return nameList.map(n => {
+      const c = campaigns[n];
+      const last = dates.length ? (c.days[dates[dates.length - 1]] || {}) : {};
+      const cur = c.current || {};
+      // TRUE per-person rate: distinct people who opened/clicked at least
+      // once, out of total leads in the campaign -- NOT event counts
+      // divided by emails sent (which inflates with every follow-up
+      // sequence step and can produce nonsensical rates over 100%).
+      const openPct = pct(cur.unique_openers_lifetime || 0, cur.leads_count || 0);
+      const clickPct = pct(cur.unique_clickers_lifetime || 0, cur.leads_count || 0);
+      const bounceHigh = (cur.bounced_lifetime || 0) > 5;
+      return `
+        <tr>
+          <td>${n}</td>
+          <td>${cur.leads_count || 0}</td>
+          <td>${cur.sent_24h || 0}</td>
+          <td>${last.opened || 0}</td>
+          <td>${last.clicks || 0}</td>
+          <td>${last.replies || 0}</td>
+          <td>${openPct}%</td>
+          <td>${clickPct}%</td>
+          <td>${cur.sent_lifetime || 0}</td>
+          <td>${cur.opens_lifetime || 0}</td>
+          <td>${cur.clicks_lifetime || 0}</td>
+          <td>${cur.replies_lifetime || 0}</td>
+          <td class="${bounceHigh ? 'danger' : ''}">${cur.bounced_lifetime || 0}</td>
+          <td>${cur.leads_sheet_url ? `<a href="${cur.leads_sheet_url}" target="_blank" rel="noopener">Open ↗</a>` : '—'}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  document.getElementById('activeCampaignRows').innerHTML = buildRows(activeNames)
+    || `<tr><td colspan="14" style="text-align:center; color:#767671; padding:16px;">No active campaigns</td></tr>`;
+  document.getElementById('completedCampaignRows').innerHTML = buildRows(completedNames)
+    || `<tr><td colspan="14" style="text-align:center; color:#767671; padding:16px;">No completed campaigns yet</td></tr>`;
 }
 
 load().catch(err => {
