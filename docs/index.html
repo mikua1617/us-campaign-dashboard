@@ -54,6 +54,7 @@
   <thead>
     <tr>
       <th>Campaign</th>
+      <th>Leads</th>
       <th>Sent 24h</th>
       <th>Opens today</th>
       <th>Clicks today</th>
@@ -175,12 +176,20 @@ async function load() {
     const c = campaigns[n];
     const last = dates.length ? (c.days[dates[dates.length - 1]] || {}) : {};
     const cur = c.current || {};
-    const clickPct = pct(cur.clicks_lifetime || 0, cur.sent_lifetime || 0);
-    const openPct = pct(cur.opens_lifetime || 0, cur.sent_lifetime || 0);
+    // Rates use UNIQUE opens/clicks (distinct people), not raw event counts --
+    // using raw totals here can exceed 100% since one person can open the
+    // same email multiple times.
+    // TRUE per-person rate: distinct people who opened/clicked at least
+    // once, out of total leads in the campaign -- NOT event counts divided
+    // by emails sent (which inflates with every follow-up sequence step
+    // and can produce nonsensical rates over 100%).
+    const openPct = pct(cur.unique_openers_lifetime || 0, cur.leads_count || 0);
+    const clickPct = pct(cur.unique_clickers_lifetime || 0, cur.leads_count || 0);
     const bounceHigh = (cur.bounced_lifetime || 0) > 5;
     return `
       <tr>
         <td>${n}</td>
+        <td>${cur.leads_count || 0}</td>
         <td>${cur.sent_24h || 0}</td>
         <td>${last.opened || 0}</td>
         <td>${last.clicks || 0}</td>
