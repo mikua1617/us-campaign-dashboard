@@ -109,8 +109,14 @@ def build_html(data):
         last_date = max(c.get("days", {}).keys(), default=None)
         last = c.get("days", {}).get(last_date, {}) if last_date else {}
         cur = c.get("current", {})
-        open_pct = pct(cur.get("opens_lifetime", 0), cur.get("sent_lifetime", 0))
-        click_pct = pct(cur.get("clicks_lifetime", 0), cur.get("sent_lifetime", 0))
+        # Rates use UNIQUE opens/clicks, not raw event counts -- raw totals
+        # can exceed 100% since one person can open the same email multiple
+        # times.
+        # TRUE per-person rate: distinct people who opened/clicked at least
+        # once, out of total leads -- not event counts, which inflate with
+        # every follow-up sequence step.
+        open_pct = pct(cur.get("unique_openers_lifetime", 0), cur.get("leads_count", 0))
+        click_pct = pct(cur.get("unique_clickers_lifetime", 0), cur.get("leads_count", 0))
         bounce_high = cur.get("bounced_lifetime", 0) > 5
         bounce_style = "color:#b23b3b; font-weight:600;" if bounce_high else ""
         sheet_url = cur.get("leads_sheet_url")
@@ -118,6 +124,7 @@ def build_html(data):
         rows_html += f"""
         <tr>
           <td style="padding:6px 8px; border-bottom:1px solid #eee;">{name}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('leads_count', 0)}</td>
           <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('sent_24h', 0)}</td>
           <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{last.get('opened', 0)}</td>
           <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{last.get('clicks', 0)}</td>
@@ -152,6 +159,7 @@ def build_html(data):
         <thead>
           <tr style="text-align:right;">
             <th style="text-align:left; padding:6px 8px; color:#767671; border-bottom:1px solid #ccc;">Campaign</th>
+            <th style="padding:6px 8px; color:#767671; border-bottom:1px solid #ccc;">Leads</th>
             <th style="padding:6px 8px; color:#767671; border-bottom:1px solid #ccc;">Sent 24h</th>
             <th style="padding:6px 8px; color:#767671; border-bottom:1px solid #ccc;">Opens today</th>
             <th style="padding:6px 8px; color:#767671; border-bottom:1px solid #ccc;">Clicks today</th>

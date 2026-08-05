@@ -43,6 +43,34 @@ def api_get(path, params=None):
     return resp.json()
 
 
+def api_post(path, body=None):
+    resp = requests.post(f"{BASE_URL}{path}", headers=HEADERS, json=body or {}, timeout=30)
+    resp.raise_for_status()
+    return resp.json()
+
+
+def get_all_leads(campaign_id):
+    """
+    Full lead list for a campaign -- needed to compute TRUE per-person
+    open/click rates (distinct people who engaged, out of total leads),
+    not just event counts. NOTE: unlike /campaigns (GET), this is a POST
+    endpoint with a JSON body -- confirmed via developer.instantly.ai.
+    """
+    leads = []
+    starting_after = None
+    while True:
+        body = {"campaign": campaign_id, "limit": 100}
+        if starting_after:
+            body["starting_after"] = starting_after
+        page = api_post("/leads/list", body)
+        items = page.get("items", [])
+        leads.extend(items)
+        starting_after = page.get("next_starting_after") or (page.get("pagination") or {}).get("next_starting_after")
+        if not starting_after or not items:
+            break
+    return leads
+
+
 def get_active_us_campaigns():
     """Active campaigns (status=1) whose name starts with 'US_'."""
     campaigns = []
@@ -93,6 +121,13 @@ def get_lifetime_overview(campaign_id):
         "bounced_lifetime": row.get("bounced_count", 0),
         "opens_lifetime": row.get("open_count", 0),
         "clicks_lifetime": row.get("link_click_count", 0),
+        # Unique = distinct people who opened/clicked at least once. Use
+        # THESE for rate/percentage calculations -- opens_lifetime/
+        # clicks_lifetime are total EVENTS (can exceed sent count if people
+        # open the same email multiple times) and will produce nonsensical
+        # rates over 100% if used as a percentage denominator's numerator.
+        "opens_unique_lifetime": row.get("open_count_unique", 0),
+        "clicks_unique_lifetime": row.get("link_click_count_unique", 0),
         "replies_lifetime": row.get("reply_count", 0),
     }
 
@@ -181,10 +216,25 @@ def main():
         # 3. Lifetime totals (1 call): bounces, opens, clicks, replies
         lifetime = get_lifetime_overview(cid)
 
+        # 4. TRUE per-person open/click rate. The overview endpoint's
+        # open_count/open_count_unique are EVENT counts (they can exceed
+        # total leads if a sequence has multiple follow-up steps, since
+        # each step's opens/clicks get counted separately). To answer
+        # "what % of people we reached actually opened something", we need
+        # to pull every lead and count how many have email_open_count >= 1
+        # ourselves -- a genuinely person-level count.
+        leads = get_all_leads(cid)
+        leads_count = len(leads)
+        unique_openers = sum(1 for l in leads if l.get("email_open_count", 0) >= 1)
+        unique_clickers = sum(1 for l in leads if l.get("email_click_count", 0) >= 1)
+
         bucket["current"] = {
             "sent_24h": sent_24h,
             "replies_24h": replies_24h,
             **lifetime,
+            "leads_count": leads_count,
+            "unique_openers_lifetime": unique_openers,
+            "unique_clickers_lifetime": unique_clickers,
             "as_of": now.isoformat(),
         }
 
