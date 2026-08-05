@@ -55,7 +55,7 @@ drive_svc = build("drive", "v3", credentials=CREDS)
 SHARED_DRIVE_FOLDER_ID = "0AHbv-XKfGFpmUk9PVA"
 
 SHARE_WITH = [
-    "ray.millman@ituring.ai",
+    "suman@ituring.ai",
     "girdhar.s@ituring.ai",
     "valsan@ituring.ai",
     "bemnet.tesfaye@ituring.ai",
