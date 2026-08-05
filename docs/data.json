@@ -314,25 +314,17 @@
     },
     "US_Post Event Followup Monticello Symposium_15/07/26": {
       "current": {
-        "as_of": "2026-08-04T05:27:31.539343+00:00",
+        "as_of": "2026-08-05T05:27:04.179105+00:00",
         "bounced_lifetime": 10,
-        "clicks_lifetime": 40,
+        "clicks_lifetime": 56,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1kcvbCpaUBO4DvXprCEdArjNXR0rJxQazC6R1a7FzVgE/edit",
-        "opens_lifetime": 96,
+        "opens_lifetime": 110,
         "replies_24h": 0,
         "replies_lifetime": 1,
-        "sent_24h": 0,
-        "sent_lifetime": 243
+        "sent_24h": 27,
+        "sent_lifetime": 270
       },
       "days": {
-        "2026-07-21": {
-          "clicks": 0,
-          "opened": 6,
-          "replies": 0,
-          "sent": 16,
-          "unique_clicks": 0,
-          "unique_opened": 5
-        },
         "2026-07-22": {
           "clicks": 1,
           "opened": 11,
@@ -396,6 +388,14 @@
           "sent": 0,
           "unique_clicks": 0,
           "unique_opened": 1
+        },
+        "2026-08-04": {
+          "clicks": 16,
+          "opened": 14,
+          "replies": 0,
+          "sent": 27,
+          "unique_clicks": 12,
+          "unique_opened": 10
         }
       },
       "id": "1b27009b-e950-42ac-a791-694a3a491ca9"
@@ -481,6 +481,6 @@
       "id": "7998cfd2-d8de-491b-8340-fe5b8ebfee02"
     }
   },
-  "generated_at": "2026-08-04T05:27:31.539343+00:00",
+  "generated_at": "2026-08-05T05:27:04.179105+00:00",
   "master_pivot_url": "https://docs.google.com/spreadsheets/d/1LWrBgz4--rR1gO66bfX-ZMHFdgcWccpJ4d-MY_O_Zcg/edit"
 }
