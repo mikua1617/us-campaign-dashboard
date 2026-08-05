@@ -314,15 +314,20 @@
     },
     "US_Post Event Followup Monticello Symposium_15/07/26": {
       "current": {
-        "as_of": "2026-08-05T05:27:04.179105+00:00",
+        "as_of": "2026-08-05T08:42:22.482242+00:00",
         "bounced_lifetime": 10,
         "clicks_lifetime": 56,
+        "clicks_unique_lifetime": 46,
+        "leads_count": 108,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1kcvbCpaUBO4DvXprCEdArjNXR0rJxQazC6R1a7FzVgE/edit",
         "opens_lifetime": 110,
+        "opens_unique_lifetime": 85,
         "replies_24h": 0,
         "replies_lifetime": 1,
         "sent_24h": 27,
-        "sent_lifetime": 270
+        "sent_lifetime": 270,
+        "unique_clickers_lifetime": 41,
+        "unique_openers_lifetime": 46
       },
       "days": {
         "2026-07-22": {
@@ -481,6 +486,6 @@
       "id": "7998cfd2-d8de-491b-8340-fe5b8ebfee02"
     }
   },
-  "generated_at": "2026-08-05T05:27:04.179105+00:00",
+  "generated_at": "2026-08-05T08:42:22.482242+00:00",
   "master_pivot_url": "https://docs.google.com/spreadsheets/d/1LWrBgz4--rR1gO66bfX-ZMHFdgcWccpJ4d-MY_O_Zcg/edit"
 }
