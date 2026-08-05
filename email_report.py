@@ -23,7 +23,7 @@ DATA_FILE = os.path.join(os.path.dirname(__file__), "docs", "data.json")
 
 # Edit this list directly to add/remove recipients -- not a secret, just names.
 RECIPIENTS = [
-    "ray.millman@ituring.ai",
+    "suman@ituring.ai",
     "girdhar.s@ituring.ai",
     "valsan@ituring.ai",
     "bemnet.tesfaye@ituring.ai",
