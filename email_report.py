@@ -86,8 +86,14 @@ def build_html(data):
         change = abs(round((diff / y) * 100)) if y else 0
         return f"{arrow} {change}% vs yesterday"
 
+    # status 1 = active; anything else (completed, paused, etc.) goes in the
+    # second section. Treat a missing status (old data, pre-this-change) as
+    # active so nothing vanishes unexpectedly during the transition.
+    active_campaigns = {n: c for n, c in campaigns.items() if c.get("current", {}).get("status", 1) == 1}
+    completed_campaigns = {n: c for n, c in campaigns.items() if n not in active_campaigns}
+
     kpi_cells = [
-        ("Active campaigns", len(campaigns), ""),
+        ("Active campaigns", len(active_campaigns), ""),
         ("Sent (24h)", sent_24h, ""),
         ("Replies (24h)", replies_24h, ""),
         ("Opens (today)", today.get("opened", 0), delta_text(today.get("opened", 0), yesterday.get("opened", 0))),
@@ -104,58 +110,52 @@ def build_html(data):
         for label, value, delta in kpi_cells
     )
 
-    rows_html = ""
-    for name, c in campaigns.items():
-        last_date = max(c.get("days", {}).keys(), default=None)
-        last = c.get("days", {}).get(last_date, {}) if last_date else {}
-        cur = c.get("current", {})
-        # Rates use UNIQUE opens/clicks, not raw event counts -- raw totals
-        # can exceed 100% since one person can open the same email multiple
-        # times.
-        # TRUE per-person rate: distinct people who opened/clicked at least
-        # once, out of total leads -- not event counts, which inflate with
-        # every follow-up sequence step.
-        open_pct = pct(cur.get("unique_openers_lifetime", 0), cur.get("leads_count", 0))
-        click_pct = pct(cur.get("unique_clickers_lifetime", 0), cur.get("leads_count", 0))
-        bounce_high = cur.get("bounced_lifetime", 0) > 5
-        bounce_style = "color:#b23b3b; font-weight:600;" if bounce_high else ""
-        sheet_url = cur.get("leads_sheet_url")
-        sheet_link = f'<a href="{sheet_url}" style="color:#2a78d6;">Open &rarr;</a>' if sheet_url else "—"
-        rows_html += f"""
-        <tr>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee;">{name}</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('leads_count', 0)}</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('sent_24h', 0)}</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{last.get('opened', 0)}</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{last.get('clicks', 0)}</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{last.get('replies', 0)}</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{open_pct}%</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{click_pct}%</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('sent_lifetime', 0)}</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('opens_lifetime', 0)}</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('clicks_lifetime', 0)}</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('replies_lifetime', 0)}</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right; {bounce_style}">{cur.get('bounced_lifetime', 0)}</td>
-          <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:center;">{sheet_link}</td>
-        </tr>"""
+    def build_rows(campaign_dict):
+        rows = ""
+        for name, c in campaign_dict.items():
+            last_date = max(c.get("days", {}).keys(), default=None)
+            last = c.get("days", {}).get(last_date, {}) if last_date else {}
+            cur = c.get("current", {})
+            # TRUE per-person rate: distinct people who opened/clicked at
+            # least once, out of total leads -- not event counts, which
+            # inflate with every follow-up sequence step.
+            open_pct = pct(cur.get("unique_openers_lifetime", 0), cur.get("leads_count", 0))
+            click_pct = pct(cur.get("unique_clickers_lifetime", 0), cur.get("leads_count", 0))
+            bounce_high = cur.get("bounced_lifetime", 0) > 5
+            bounce_style = "color:#b23b3b; font-weight:600;" if bounce_high else ""
+            sheet_url = cur.get("leads_sheet_url")
+            sheet_link = f'<a href="{sheet_url}" style="color:#2a78d6;">Open &rarr;</a>' if sheet_url else "—"
+            rows += f"""
+            <tr>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee;">{name}</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('leads_count', 0)}</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('sent_24h', 0)}</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{last.get('opened', 0)}</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{last.get('clicks', 0)}</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{last.get('replies', 0)}</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{open_pct}%</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{click_pct}%</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('sent_lifetime', 0)}</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('opens_lifetime', 0)}</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('clicks_lifetime', 0)}</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right;">{cur.get('replies_lifetime', 0)}</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:right; {bounce_style}">{cur.get('bounced_lifetime', 0)}</td>
+              <td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:center;">{sheet_link}</td>
+            </tr>"""
+        if not rows:
+            rows = '<tr><td colspan="14" style="padding:12px; text-align:center; color:#767671;">None</td></tr>'
+        return rows
+
+    active_rows_html = build_rows(active_campaigns)
+    completed_rows_html = build_rows(completed_campaigns)
 
     generated_str = (
         datetime.fromisoformat(generated_at).strftime("%d %b %Y, %I:%M %p UTC")
         if generated_at else "unknown"
     )
 
-    return f"""
-    <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; color:#1a1a19; max-width:900px;">
-      <h2 style="margin-bottom:4px;">US campaign dashboard — daily report</h2>
-      <p style="font-size:13px; color:#767671; margin-top:0;">
-        Generated {generated_str} &middot;
-        <a href="{DASHBOARD_URL}" style="color:#2a78d6;">View live dashboard &rarr;</a>
-        {f' &middot; <a href="{master_pivot_url}" style="color:#2a78d6;">Master engagement pivot &rarr;</a>' if master_pivot_url else ''}
-      </p>
-
-      <table cellspacing="0" cellpadding="0" style="margin: 16px 0;"><tr>{kpi_html}</tr></table>
-
-      <table cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-size:13px;">
+    def table_header():
+        return """
         <thead>
           <tr style="text-align:right;">
             <th style="text-align:left; padding:6px 8px; color:#767671; border-bottom:1px solid #ccc;">Campaign</th>
@@ -174,7 +174,30 @@ def build_html(data):
             <th style="padding:6px 8px; color:#767671; border-bottom:1px solid #ccc;">Leads sheet</th>
           </tr>
         </thead>
-        <tbody>{rows_html}</tbody>
+        """
+
+    return f"""
+    <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; color:#1a1a19; max-width:900px;">
+      <h2 style="margin-bottom:4px;">US campaign dashboard — daily report</h2>
+      <p style="font-size:13px; color:#767671; margin-top:0;">
+        Generated {generated_str} &middot;
+        <a href="{DASHBOARD_URL}" style="color:#2a78d6;">View live dashboard &rarr;</a>
+        {f' &middot; <a href="{master_pivot_url}" style="color:#2a78d6;">Master engagement pivot &rarr;</a>' if master_pivot_url else ''}
+      </p>
+
+      <table cellspacing="0" cellpadding="0" style="margin: 16px 0;"><tr>{kpi_html}</tr></table>
+
+      <h3 style="font-size:14px; margin:20px 0 6px;">Active campaigns</h3>
+      <table cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-size:13px;">
+        {table_header()}
+        <tbody>{active_rows_html}</tbody>
+      </table>
+
+      <h3 style="font-size:14px; margin:24px 0 2px;">Completed campaigns</h3>
+      <p style="font-size:11px; color:#767671; margin:0 0 6px;">Still tracked — opens, clicks, and replies can keep arriving for weeks after the last send.</p>
+      <table cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-size:13px;">
+        {table_header()}
+        <tbody>{completed_rows_html}</tbody>
       </table>
     </div>
     """

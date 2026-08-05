@@ -58,12 +58,19 @@ def get_all_leads(campaign_id):
     """
     leads = []
     starting_after = None
+    page_num = 0
     while True:
+        page_num += 1
         body = {"campaign": campaign_id, "limit": 100}
         if starting_after:
             body["starting_after"] = starting_after
         page = api_post("/leads/list", body)
         items = page.get("items", [])
+        if not items and page_num == 1:
+            # Empty first page is suspicious -- log the raw response so we
+            # can tell a real "zero leads" apart from a silent API issue
+            # (e.g. rate limiting that returns 200 with an unexpected body).
+            print(f"    WARNING: /leads/list page 1 for campaign {campaign_id} returned no items. Raw response keys: {list(page.keys())}, full response: {page}")
         leads.extend(items)
         starting_after = page.get("next_starting_after") or (page.get("pagination") or {}).get("next_starting_after")
         if not starting_after or not items:
@@ -71,19 +78,25 @@ def get_all_leads(campaign_id):
     return leads
 
 
-def get_active_us_campaigns():
-    """Active campaigns (status=1) whose name starts with 'US_'."""
+def get_all_us_campaigns():
+    """
+    ALL campaigns whose name starts with 'US_', regardless of status --
+    no status filter. A completed campaign can still accumulate opens/
+    clicks/replies for weeks after its last send, so we keep tracking it
+    rather than freezing or dropping it. Each campaign's status is kept so
+    the dashboard can split into Active vs Completed sections.
+    """
     campaigns = []
     starting_after = None
     while True:
-        params = {"limit": 100, "status": 1}
+        params = {"limit": 100}
         if starting_after:
             params["starting_after"] = starting_after
         page = api_get("/campaigns", params)
         items = page.get("items", [])
         for c in items:
             if c["name"].startswith("US_"):
-                campaigns.append({"id": c["id"], "name": c["name"]})
+                campaigns.append({"id": c["id"], "name": c["name"], "status": c["status"]})
         starting_after = page.get("next_starting_after")
         if not starting_after or not items:
             break
@@ -142,13 +155,17 @@ def count_recent_emails(campaign_id, email_type, since_dt):
     """
     count = 0
     starting_after = None
+    page_num = 0
     while True:
+        page_num += 1
         params = {"campaign_id": campaign_id, "email_type": email_type, "limit": 100}
         if starting_after:
             params["starting_after"] = starting_after
         page = api_get("/emails", params)
         items = page.get("items", [])
         if not items:
+            if page_num == 1:
+                print(f"    WARNING: /emails ({email_type}) page 1 for campaign {campaign_id} returned no items. Raw response keys: {list(page.keys())}, full response: {page}")
             break
         stop = False
         for item in items:
@@ -180,13 +197,13 @@ def main():
     window_end = now.strftime("%Y-%m-%d")
 
     data = load_existing_data()
-    campaigns = get_active_us_campaigns()
+    campaigns = get_all_us_campaigns()
 
     if not campaigns:
-        print("No active US_ campaigns found. Check naming convention or campaign status.")
+        print("No US_ campaigns found at all. Check naming convention.")
 
     for c in campaigns:
-        name, cid = c["name"], c["id"]
+        name, cid, status = c["name"], c["id"], c["status"]
         print(f"Fetching: {name}")
 
         bucket = data["campaigns"].setdefault(name, {"id": cid, "days": {}, "current": {}})
@@ -229,6 +246,7 @@ def main():
         unique_clickers = sum(1 for l in leads if l.get("email_click_count", 0) >= 1)
 
         bucket["current"] = {
+            "status": status,  # 1 = active, anything else = completed/paused/other
             "sent_24h": sent_24h,
             "replies_24h": replies_24h,
             **lifetime,
@@ -237,6 +255,7 @@ def main():
             "unique_clickers_lifetime": unique_clickers,
             "as_of": now.isoformat(),
         }
+        print(f"    -> status={status}, sent_24h={sent_24h}, replies_24h={replies_24h}, leads_count={leads_count}, unique_openers={unique_openers}, unique_clickers={unique_clickers}, sent_lifetime={lifetime.get('sent_lifetime')}")
 
     data["generated_at"] = now.isoformat()
 
