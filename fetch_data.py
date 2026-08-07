@@ -22,6 +22,7 @@ schedule.
 import json
 import os
 import sys
+import time
 from datetime import datetime, timedelta, timezone
 
 import requests
@@ -36,17 +37,51 @@ HEADERS = {"Authorization": f"Bearer {API_KEY}"}
 DATA_FILE = os.path.join(os.path.dirname(__file__), "docs", "data.json")
 DAILY_WINDOW_DAYS = 14  # how many days of calendar-day history we keep/refresh
 
+MAX_RETRIES = 5
+RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
+
+
+REQUEST_DELAY_SECONDS = 0.4  # small gap between every call -- avoids bursting
+
+
+def _request_with_retry(method, path, **kwargs):
+    """
+    Transient failures (rate limits, momentary server issues) shouldn't
+    crash the whole run and skip every campaign after the failing one.
+    Retries with exponential backoff (2s, 4s, 8s, 16s, 32s) on 429/5xx.
+    Real errors (400, 404, auth failures, etc.) fail immediately, not
+    silently retried into oblivion.
+
+    Also adds a small fixed delay before every call (not just after a
+    failure) -- our calls go out back-to-back with zero natural spacing,
+    which can trip a short burst-window limit even when nowhere near a
+    per-minute average. This is a cheap way to reduce how bursty we look.
+    """
+    url = f"{BASE_URL}{path}"
+    for attempt in range(1, MAX_RETRIES + 1):
+        time.sleep(REQUEST_DELAY_SECONDS)
+        resp = requests.request(method, url, headers=HEADERS, timeout=30, **kwargs)
+        if resp.status_code not in RETRYABLE_STATUS_CODES:
+            resp.raise_for_status()
+            return resp.json()
+        if resp.status_code == 429:
+            # Log whatever rate-limit info Instantly actually sends back --
+            # real diagnostic data instead of guessing at the limit next time.
+            rate_headers = {k: v for k, v in resp.headers.items() if "rate" in k.lower() or "retry" in k.lower()}
+            print(f"    429 rate-limit headers: {rate_headers or '(none returned)'}")
+        if attempt == MAX_RETRIES:
+            resp.raise_for_status()  # out of retries -- raise the real error
+        wait = 2 ** attempt
+        print(f"    Got {resp.status_code} on {method} {path} (attempt {attempt}/{MAX_RETRIES}), retrying in {wait}s...")
+        time.sleep(wait)
+
 
 def api_get(path, params=None):
-    resp = requests.get(f"{BASE_URL}{path}", headers=HEADERS, params=params or {}, timeout=30)
-    resp.raise_for_status()
-    return resp.json()
+    return _request_with_retry("GET", path, params=params or {})
 
 
 def api_post(path, body=None):
-    resp = requests.post(f"{BASE_URL}{path}", headers=HEADERS, json=body or {}, timeout=30)
-    resp.raise_for_status()
-    return resp.json()
+    return _request_with_retry("POST", path, json=body or {})
 
 
 def get_all_leads(campaign_id):

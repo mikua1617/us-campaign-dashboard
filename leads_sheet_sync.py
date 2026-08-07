@@ -157,7 +157,7 @@ def create_sheet_for_campaign(campaign_name):
     }
     created = drive_svc.files().create(
         body=file_metadata, fields="id", supportsAllDrives=True
-    ).execute()
+    ).execute(num_retries=5)
     sheet_id = created["id"]
     for email in SHARE_WITH:
         drive_svc.permissions().create(
@@ -165,7 +165,7 @@ def create_sheet_for_campaign(campaign_name):
             body={"type": "user", "role": "reader", "emailAddress": email},
             sendNotificationEmail=False,
             supportsAllDrives=True,
-        ).execute()
+        ).execute(num_retries=5)
     return sheet_id
 
 
@@ -224,13 +224,13 @@ def sync_leads_to_sheet(sheet_id, leads):
 
     sheets_svc.spreadsheets().values().clear(
         spreadsheetId=sheet_id, range="A1:Z10000", body={}
-    ).execute()
+    ).execute(num_retries=5)
     sheets_svc.spreadsheets().values().update(
         spreadsheetId=sheet_id,
         range="A1",
         valueInputOption="RAW",
         body={"values": rows},
-    ).execute()
+    ).execute(num_retries=5)
 
 
 def get_or_create_master_pivot_sheet(links):
@@ -290,13 +290,13 @@ def sync_master_pivot(sheet_id, all_leads_by_campaign):
 
     sheets_svc.spreadsheets().values().clear(
         spreadsheetId=sheet_id, range="A1:Z10000", body={}
-    ).execute()
+    ).execute(num_retries=5)
     sheets_svc.spreadsheets().values().update(
         spreadsheetId=sheet_id,
         range="A1",
         valueInputOption="RAW",
         body={"values": rows},
-    ).execute()
+    ).execute(num_retries=5)
 
 
 def main():
