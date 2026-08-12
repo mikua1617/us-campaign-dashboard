@@ -2,14 +2,14 @@
   "campaigns": {
     "US_CEDP 2_30/06/26": {
       "current": {
-        "as_of": "2026-08-11T03:57:53.859462+00:00",
+        "as_of": "2026-08-12T04:32:55.461032+00:00",
         "bounced_lifetime": 3,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
         "leads_count": 35,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1MaB1nGmVD20wuKTPK0Q6Mhu7rAhAHGN08dEwUKjFAdw/edit",
-        "opens_lifetime": 145,
-        "opens_unique_lifetime": 101,
+        "opens_lifetime": 147,
+        "opens_unique_lifetime": 102,
         "replies_24h": 0,
         "replies_lifetime": 0,
         "sent_24h": 0,
@@ -19,14 +19,6 @@
         "unique_openers_lifetime": 29
       },
       "days": {
-        "2026-07-28": {
-          "clicks": 0,
-          "opened": 0,
-          "replies": 0,
-          "sent": 1,
-          "unique_clicks": 0,
-          "unique_opened": 0
-        },
         "2026-08-06": {
           "clicks": 0,
           "opened": 0,
@@ -34,13 +26,21 @@
           "sent": 0,
           "unique_clicks": 0,
           "unique_opened": 0
+        },
+        "2026-08-11": {
+          "clicks": 0,
+          "opened": 2,
+          "replies": 0,
+          "sent": 0,
+          "unique_clicks": 0,
+          "unique_opened": 1
         }
       },
       "id": "52c63dfa-cc95-42d8-9a4a-33ee50c7b9b3"
     },
     "US_CU Ray_16/07/26": {
       "current": {
-        "as_of": "2026-08-11T03:57:53.859462+00:00",
+        "as_of": "2026-08-12T04:32:55.461032+00:00",
         "bounced_lifetime": 60,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
@@ -56,45 +56,28 @@
         "unique_clickers_lifetime": 0,
         "unique_openers_lifetime": 7
       },
-      "days": {
-        "2026-07-28": {
-          "clicks": 0,
-          "opened": 1,
-          "replies": 0,
-          "sent": 1,
-          "unique_clicks": 0,
-          "unique_opened": 1
-        }
-      },
+      "days": {},
       "id": "b2efc65a-6224-4e21-9842-9b1a56f1ade7"
     },
     "US_Collections Top 50_21/07/26": {
       "current": {
-        "as_of": "2026-08-11T03:57:53.859462+00:00",
+        "as_of": "2026-08-12T04:32:55.461032+00:00",
         "bounced_lifetime": 15,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
         "leads_count": 63,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1kMIvt-DUieluQipFKwUvVAEcG-9DFjfd4RWBG5cxopg/edit",
-        "opens_lifetime": 116,
-        "opens_unique_lifetime": 101,
+        "opens_lifetime": 130,
+        "opens_unique_lifetime": 113,
         "replies_24h": 0,
         "replies_lifetime": 0,
-        "sent_24h": 0,
-        "sent_lifetime": 271,
-        "status": 1,
+        "sent_24h": 19,
+        "sent_lifetime": 290,
+        "status": 3,
         "unique_clickers_lifetime": 0,
-        "unique_openers_lifetime": 32
+        "unique_openers_lifetime": 34
       },
       "days": {
-        "2026-07-28": {
-          "clicks": 0,
-          "opened": 21,
-          "replies": 0,
-          "sent": 58,
-          "unique_clicks": 0,
-          "unique_opened": 20
-        },
         "2026-07-29": {
           "clicks": 0,
           "opened": 2,
@@ -142,27 +125,35 @@
           "sent": 0,
           "unique_clicks": 0,
           "unique_opened": 0
+        },
+        "2026-08-11": {
+          "clicks": 0,
+          "opened": 14,
+          "replies": 0,
+          "sent": 19,
+          "unique_clicks": 0,
+          "unique_opened": 13
         }
       },
       "id": "a3c94c6d-b995-4805-b4a8-0e9a2ffe901f"
     },
     "US_Insurance Life Health_05/08/26": {
       "current": {
-        "as_of": "2026-08-11T03:57:53.859462+00:00",
-        "bounced_lifetime": 2,
+        "as_of": "2026-08-12T04:32:55.461032+00:00",
+        "bounced_lifetime": 3,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
         "leads_count": 41,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1lyQX82qWbn9t0VfB-4UPEWsOQBjkQn9deosegY-7JQA/edit",
-        "opens_lifetime": 13,
-        "opens_unique_lifetime": 8,
+        "opens_lifetime": 24,
+        "opens_unique_lifetime": 9,
         "replies_24h": 0,
         "replies_lifetime": 0,
-        "sent_24h": 0,
-        "sent_lifetime": 60,
+        "sent_24h": 38,
+        "sent_lifetime": 98,
         "status": 1,
         "unique_clickers_lifetime": 0,
-        "unique_openers_lifetime": 8
+        "unique_openers_lifetime": 9
       },
       "days": {
         "2026-08-05": {
@@ -180,27 +171,35 @@
           "sent": 20,
           "unique_clicks": 0,
           "unique_opened": 2
+        },
+        "2026-08-11": {
+          "clicks": 0,
+          "opened": 11,
+          "replies": 0,
+          "sent": 38,
+          "unique_clicks": 0,
+          "unique_opened": 9
         }
       },
       "id": "1c57851e-1167-448d-913a-46af5c2bc19a"
     },
     "US_Insurance Property Casualty_05/08/26": {
       "current": {
-        "as_of": "2026-08-11T03:57:53.859462+00:00",
-        "bounced_lifetime": 1,
+        "as_of": "2026-08-12T04:32:55.461032+00:00",
+        "bounced_lifetime": 2,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
         "leads_count": 56,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1KdoSU30GRPdTj3RB5GxWwy6qpm2702kMc_aigp2tTaM/edit",
-        "opens_lifetime": 8,
-        "opens_unique_lifetime": 6,
+        "opens_lifetime": 15,
+        "opens_unique_lifetime": 8,
         "replies_24h": 0,
         "replies_lifetime": 0,
-        "sent_24h": 0,
-        "sent_lifetime": 75,
+        "sent_24h": 45,
+        "sent_lifetime": 120,
         "status": 1,
         "unique_clickers_lifetime": 0,
-        "unique_openers_lifetime": 6
+        "unique_openers_lifetime": 8
       },
       "days": {
         "2026-08-05": {
@@ -226,13 +225,21 @@
           "sent": 0,
           "unique_clicks": 0,
           "unique_opened": 1
+        },
+        "2026-08-11": {
+          "clicks": 0,
+          "opened": 7,
+          "replies": 0,
+          "sent": 45,
+          "unique_clicks": 0,
+          "unique_opened": 6
         }
       },
       "id": "d85e03ce-9ead-4b49-88a8-00366cb49f57"
     },
     "US_Post Event Followup GLCCA_15/07/26": {
       "current": {
-        "as_of": "2026-08-11T03:57:53.859462+00:00",
+        "as_of": "2026-08-12T04:32:55.461032+00:00",
         "bounced_lifetime": 1,
         "clicks_lifetime": 113,
         "clicks_unique_lifetime": 37,
@@ -249,14 +256,6 @@
         "unique_openers_lifetime": 41
       },
       "days": {
-        "2026-07-28": {
-          "clicks": 17,
-          "opened": 12,
-          "replies": 0,
-          "sent": 30,
-          "unique_clicks": 11,
-          "unique_opened": 9
-        },
         "2026-08-03": {
           "clicks": 0,
           "opened": 2,
@@ -270,31 +269,23 @@
     },
     "US_Post Event Followup Monticello Symposium_15/07/26": {
       "current": {
-        "as_of": "2026-08-11T03:57:53.859462+00:00",
+        "as_of": "2026-08-12T04:32:55.461032+00:00",
         "bounced_lifetime": 10,
-        "clicks_lifetime": 64,
-        "clicks_unique_lifetime": 48,
+        "clicks_lifetime": 71,
+        "clicks_unique_lifetime": 57,
         "leads_count": 108,
         "leads_sheet_url": "https://docs.google.com/spreadsheets/d/1kcvbCpaUBO4DvXprCEdArjNXR0rJxQazC6R1a7FzVgE/edit",
-        "opens_lifetime": 120,
-        "opens_unique_lifetime": 97,
+        "opens_lifetime": 127,
+        "opens_unique_lifetime": 103,
         "replies_24h": 0,
         "replies_lifetime": 1,
-        "sent_24h": 0,
-        "sent_lifetime": 289,
-        "status": 1,
-        "unique_clickers_lifetime": 42,
-        "unique_openers_lifetime": 50
+        "sent_24h": 15,
+        "sent_lifetime": 304,
+        "status": 3,
+        "unique_clickers_lifetime": 49,
+        "unique_openers_lifetime": 52
       },
       "days": {
-        "2026-07-28": {
-          "clicks": 18,
-          "opened": 9,
-          "replies": 0,
-          "sent": 25,
-          "unique_clicks": 17,
-          "unique_opened": 9
-        },
         "2026-07-29": {
           "clicks": 5,
           "opened": 8,
@@ -350,13 +341,21 @@
           "sent": 4,
           "unique_clicks": 3,
           "unique_opened": 2
+        },
+        "2026-08-11": {
+          "clicks": 7,
+          "opened": 7,
+          "replies": 0,
+          "sent": 15,
+          "unique_clicks": 7,
+          "unique_opened": 6
         }
       },
       "id": "1b27009b-e950-42ac-a791-694a3a491ca9"
     },
     "US_Valsan Newsletter subscribers_15/07/26": {
       "current": {
-        "as_of": "2026-08-11T03:57:53.859462+00:00",
+        "as_of": "2026-08-12T04:32:55.461032+00:00",
         "bounced_lifetime": 7,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
@@ -373,14 +372,6 @@
         "unique_openers_lifetime": 30
       },
       "days": {
-        "2026-07-28": {
-          "clicks": 0,
-          "opened": 8,
-          "replies": 0,
-          "sent": 15,
-          "unique_clicks": 0,
-          "unique_opened": 7
-        },
         "2026-08-08": {
           "clicks": 0,
           "opened": 1,
@@ -409,6 +400,6 @@
       "id": "7998cfd2-d8de-491b-8340-fe5b8ebfee02"
     }
   },
-  "generated_at": "2026-08-11T03:57:53.859462+00:00",
+  "generated_at": "2026-08-12T04:32:55.461032+00:00",
   "master_pivot_url": "https://docs.google.com/spreadsheets/d/1LWrBgz4--rR1gO66bfX-ZMHFdgcWccpJ4d-MY_O_Zcg/edit"
 }
