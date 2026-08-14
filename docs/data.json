@@ -2,7 +2,7 @@
   "campaigns": {
     "US_CEDP 2_30/06/26": {
       "current": {
-        "as_of": "2026-08-14T04:20:58.849554+00:00",
+        "as_of": "2026-08-14T15:15:58.000052+00:00",
         "bounced_lifetime": 3,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
@@ -40,7 +40,7 @@
     },
     "US_CU Ray_16/07/26": {
       "current": {
-        "as_of": "2026-08-14T04:20:58.849554+00:00",
+        "as_of": "2026-08-14T15:15:58.000052+00:00",
         "bounced_lifetime": 60,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
@@ -61,7 +61,7 @@
     },
     "US_Collections Top 50_21/07/26": {
       "current": {
-        "as_of": "2026-08-14T04:20:58.849554+00:00",
+        "as_of": "2026-08-14T15:15:58.000052+00:00",
         "bounced_lifetime": 15,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
@@ -131,8 +131,8 @@
     },
     "US_Fiserv Forum Pre event SVP_12/08/26": {
       "current": {
-        "as_of": "2026-08-14T04:20:58.849554+00:00",
-        "bounced_lifetime": 21,
+        "as_of": "2026-08-14T15:15:58.000052+00:00",
+        "bounced_lifetime": 22,
         "clicks_lifetime": 11,
         "clicks_unique_lifetime": 5,
         "leads_count": 894,
@@ -141,9 +141,9 @@
         "opens_unique_lifetime": 60,
         "replies_24h": 0,
         "replies_lifetime": 0,
-        "sent_24h": 0,
-        "sent_lifetime": 206,
-        "status": -2,
+        "sent_24h": 6,
+        "sent_lifetime": 212,
+        "status": 1,
         "unique_clickers_lifetime": 5,
         "unique_openers_lifetime": 60
       },
@@ -163,13 +163,21 @@
           "sent": 0,
           "unique_clicks": 2,
           "unique_opened": 3
+        },
+        "2026-08-14": {
+          "clicks": 0,
+          "opened": 0,
+          "replies": 0,
+          "sent": 6,
+          "unique_clicks": 0,
+          "unique_opened": 0
         }
       },
       "id": "6a335ba2-59d5-4b92-b490-b6dd0688e117"
     },
     "US_Insurance Life Health_05/08/26": {
       "current": {
-        "as_of": "2026-08-14T04:20:58.849554+00:00",
+        "as_of": "2026-08-14T15:15:58.000052+00:00",
         "bounced_lifetime": 3,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
@@ -215,7 +223,7 @@
     },
     "US_Insurance Property Casualty_05/08/26": {
       "current": {
-        "as_of": "2026-08-14T04:20:58.849554+00:00",
+        "as_of": "2026-08-14T15:15:58.000052+00:00",
         "bounced_lifetime": 2,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
@@ -277,7 +285,7 @@
     },
     "US_Post Event Followup GLCCA_15/07/26": {
       "current": {
-        "as_of": "2026-08-14T04:20:58.849554+00:00",
+        "as_of": "2026-08-14T15:15:58.000052+00:00",
         "bounced_lifetime": 1,
         "clicks_lifetime": 113,
         "clicks_unique_lifetime": 37,
@@ -307,7 +315,7 @@
     },
     "US_Post Event Followup Monticello Symposium_15/07/26": {
       "current": {
-        "as_of": "2026-08-14T04:20:58.849554+00:00",
+        "as_of": "2026-08-14T15:15:58.000052+00:00",
         "bounced_lifetime": 10,
         "clicks_lifetime": 71,
         "clicks_unique_lifetime": 58,
@@ -377,7 +385,7 @@
     },
     "US_Valsan Newsletter subscribers_15/07/26": {
       "current": {
-        "as_of": "2026-08-14T04:20:58.849554+00:00",
+        "as_of": "2026-08-14T15:15:58.000052+00:00",
         "bounced_lifetime": 7,
         "clicks_lifetime": 0,
         "clicks_unique_lifetime": 0,
@@ -430,6 +438,6 @@
       "id": "7998cfd2-d8de-491b-8340-fe5b8ebfee02"
     }
   },
-  "generated_at": "2026-08-14T04:20:58.849554+00:00",
+  "generated_at": "2026-08-14T15:15:58.000052+00:00",
   "master_pivot_url": "https://docs.google.com/spreadsheets/d/1LWrBgz4--rR1gO66bfX-ZMHFdgcWccpJ4d-MY_O_Zcg/edit"
 }
